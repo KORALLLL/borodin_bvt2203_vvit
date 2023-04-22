@@ -1,0 +1,11 @@
+CREATE OR REPLACE FUNCTION deletion()
+RETURNS TRIGGER AS $del$
+BEGIN
+	DELETE FROM teacher WHERE subject_id = OLD.id;
+	DELETE FROM timetable WHERE subject_id = OLD.id;
+	RETURN OLD;
+END;
+$del$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE TRIGGER del BEFORE DELETE ON subject
+FOR EACH ROW EXECUTE PROCEDURE deletion();
